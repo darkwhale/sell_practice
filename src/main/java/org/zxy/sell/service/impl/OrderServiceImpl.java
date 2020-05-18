@@ -11,7 +11,6 @@ import org.zxy.sell.dataobject.ProductInfo;
 import org.zxy.sell.dto.CartDTO;
 import org.zxy.sell.dto.OrderDTO;
 import org.zxy.sell.enums.ExceptionEnum;
-import org.zxy.sell.enums.PayStatusEnum;
 import org.zxy.sell.enums.ProductStatusEnum;
 import org.zxy.sell.exception.SellException;
 import org.zxy.sell.repository.OrderDetailRepository;
@@ -78,7 +77,7 @@ public class OrderServiceImpl implements IOrderService {
         OrderMaster orderMaster = new OrderMaster();
         BeanUtils.copyProperties(orderDTO, orderMaster);
         orderMaster.setOrderId(orderId);
-        orderMaster.setPayStatus(PayStatusEnum.WAIT.getCode());
+        orderMaster.setOrderAmount(orderAmount);
         List<OrderDetail> orderDetailList = orderDetailRepository.saveAll(orderDTO.getOrderDetailList());
         if (orderDetailList == null) {
             throw new SellException(ExceptionEnum.ERROR);
