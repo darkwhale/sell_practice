@@ -14,5 +14,6 @@ class LoggerTest {
     void test() {
         logger.debug("debug...");
         logger.info("info...");
+        logger.error("error...");
     }
 }
