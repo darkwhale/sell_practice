@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.zxy.sell.dataobject.ProductInfo;
 import org.zxy.sell.dto.CartDTO;
 import org.zxy.sell.enums.ExceptionEnum;
@@ -51,20 +52,31 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public void increaseStock(List<CartDTO> cartDTOList) {
+        Map<String, ProductInfo> productInfoMap = getProductInfoMap(cartDTOList);
 
+        List<ProductInfo> result = new ArrayList<>();
+        for (CartDTO cartDTO : cartDTOList) {
+            ProductInfo productInfo = productInfoMap.get(cartDTO.getProductId());
+
+            if (productInfo == null) {
+                throw new SellException(ExceptionEnum.PRODUCT_NOT_EXIST);
+            }
+
+            int new_stock = productInfo.getProductStock() + cartDTO.getProductQuantity();
+            productInfo.setProductStock(new_stock);
+
+            result.add(productInfo);
+        }
+        List<ProductInfo> result_list = repository.saveAll(result);
+        if (CollectionUtils.isEmpty(result_list)) {
+            throw new SellException(ExceptionEnum.ERROR);
+        }
     }
 
     @Override
     @Transactional
     public void decreaseStock(List<CartDTO> cartDTOList) {
-
-        List<String> productId = cartDTOList.stream().map(CartDTO::getProductId).collect(Collectors.toList());
-
-        List<ProductInfo> productInfoList = repository.findByProductIdInAndProductStatus(productId,
-                ProductStatusEnum.ON_SALE.getCode());
-
-        Map<String, ProductInfo> productInfoMap = productInfoList.stream()
-                .collect(Collectors.toMap(ProductInfo::getProductId, product -> product));
+        Map<String, ProductInfo> productInfoMap = getProductInfoMap(cartDTOList);
 
         List<ProductInfo> result = new ArrayList<>();
         for (CartDTO cartDTO : cartDTOList) {
@@ -85,8 +97,19 @@ public class ProductServiceImpl implements IProductService {
         }
 
         List<ProductInfo> result_list = repository.saveAll(result);
-        if (result_list.isEmpty()) {
+        if (CollectionUtils.isEmpty(result_list)) {
             throw new SellException(ExceptionEnum.ERROR);
         }
+    }
+
+
+    private Map<String, ProductInfo> getProductInfoMap(List<CartDTO> cartDTOList) {
+        List<String> productId = cartDTOList.stream().map(CartDTO::getProductId).collect(Collectors.toList());
+
+        List<ProductInfo> productInfoList = repository.findByProductIdInAndProductStatus(productId,
+                ProductStatusEnum.ON_SALE.getCode());
+
+        return productInfoList.stream()
+                .collect(Collectors.toMap(ProductInfo::getProductId, product -> product));
     }
 }

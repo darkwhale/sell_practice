@@ -1,10 +1,9 @@
 package org.zxy.sell.service;
 
 import org.springframework.data.domain.Page;
-import org.zxy.sell.dataobject.OrderMaster;
+import org.springframework.data.domain.Pageable;
 import org.zxy.sell.dto.OrderDTO;
 
-import java.awt.print.Pageable;
 
 public interface IOrderService {
 
@@ -21,7 +20,7 @@ public interface IOrderService {
     /**
      * 查询订单列表
      */
-    Page<OrderMaster> findList(String buyerOpenid, Pageable pageable);
+    Page<OrderDTO> findList(String buyerOpenid, Pageable pageable);
 
     /**
      * 取消订单；
