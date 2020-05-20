@@ -27,6 +27,8 @@ public enum ExceptionEnum {
 
     OPENID_ERROR(18, "当前用户错误"),
 
+    WX_MP_ERROR(19, "微信异常"),
+
     ;
 
     private Integer code;
