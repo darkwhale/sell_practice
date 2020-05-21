@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: zxy
+    password: 940213
+    url: jdbc:mysql://127.0.0.1/sell?serverTimezone=UTC&characterEncoding=utf-8&useSSL=False
+  jpa:
+    show-sql: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+server:
+  servlet:
+    context-path: /sell
+#logging:
+#  pattern:
+#    console: "%d - %msg%n"
+#  file:
+#    name: ./log/sell.log
+
+wechat:
+  mpAppId: wxd15ce43f31ee57d6
+  mpAppSecret: 7e4c13b4c183383b74c694f326c1bcfb
+
+wpay:
+  mpAppid: wxd898fcb01713c658
+  mpAppSecret:
+  mchId: 1483469312
+  mchKey: 098F6BCD4621D373CADE4E832627B4F6
+  keyPath: 123456
+  notifyUrl: 123456
+

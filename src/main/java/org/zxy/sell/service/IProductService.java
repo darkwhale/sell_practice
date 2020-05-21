@@ -20,9 +20,7 @@ public interface IProductService {
 
     List<ProductInfo> findByProductIdInAndProductStatus(List<String> productIdList, Integer productStatus);
 
-    // todo 加库存
     void increaseStock(List<CartDTO> cartDTOList);
 
-    // todo 减库存
     void decreaseStock(List<CartDTO> cartDTOList);
 }
